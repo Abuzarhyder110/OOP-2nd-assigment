@@ -1,0 +1,65 @@
+class MobilePhone:
+    def __init__(self, brand, model, price, storage_capacity):
+        self.brand = brand
+        self.model = model
+        self.price = price
+        self.storage_capacity = storage_capacity
+    
+    def display_details(self):
+        print(f"Brand: {self.brand}")
+        print(f"Model: {self.model}")
+        print(f"Price: ${self.price:.2f}")
+        print(f"Storage Capacity: {self.storage_capacity} GB")
+    
+    def compare_price(self, other_phone):
+        if not isinstance(other_phone, MobilePhone):
+            raise ValueError("Comparison must be with another MobilePhone object.")
+        if self.price > other_phone.price:
+            return f"{self.brand} {self.model} is more expensive than {other_phone.brand} {other_phone.model}."
+        elif self.price < other_phone.price:
+            return f"{self.brand} {self.model} is cheaper than {other_phone.brand} {other_phone.model}."
+        else:
+            return f"{self.brand} {self.model} and {other_phone.brand} {other_phone.model} are priced the same."
+    
+    def meets_minimum_storage(self, min_storage):
+        return self.storage_capacity >= min_storage
+
+def find_phone_with_highest_storage(phones):
+    if not phones:
+        return None
+    return max(phones, key=lambda phone: phone.storage_capacity)
+
+# Example usage
+if __name__ == "__main__":
+    # Create MobilePhone objects
+    phone1 = MobilePhone("Apple", "iPhone 14", 999.99, 128)
+    phone2 = MobilePhone("Samsung", "Galaxy S23", 899.99, 256)
+    phone3 = MobilePhone("OnePlus", "9 Pro", 799.99, 256)
+    
+    # Display details
+    print("Phone Details:")
+    phone1.display_details()
+    phone2.display_details()
+    phone3.display_details()
+    print()
+    
+    # Compare prices
+    print("Price Comparison:")
+    print(phone1.compare_price(phone2))
+    print(phone2.compare_price(phone3))
+    print()
+    
+    # Check if phone meets minimum storage
+    min_storage = 200
+    print(f"Checking if phones meet minimum storage of {min_storage} GB:")
+    print(f"Phone 1 meets requirement: {phone1.meets_minimum_storage(min_storage)}")
+    print(f"Phone 2 meets requirement: {phone2.meets_minimum_storage(min_storage)}")
+    print(f"Phone 3 meets requirement: {phone3.meets_minimum_storage(min_storage)}")
+    print()
+    
+    # Find phone with the highest storage
+    phones = [phone1, phone2, phone3]
+    highest_storage_phone = find_phone_with_highest_storage(phones)
+    if highest_storage_phone:
+        print("Phone with the highest storage capacity:")
+        highest_storage_phone.display_details()
