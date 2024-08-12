@@ -1,0 +1,111 @@
+#Book Class
+from datetime import datetime
+
+class Book:
+    def __init__(self, title, author, isbn):
+        self.title = title
+        self.author = author
+        self.isbn = isbn
+        self.available = True
+        self.lending_history = []
+    
+    def check_out(self, borrower_name):
+        if self.available:
+            self.available = False
+            self.lending_history.append({
+                "borrower": borrower_name,
+                "date_checked_out": datetime.now(),
+                "date_returned": None
+            })
+            print(f"Book '{self.title}' checked out to {borrower_name}.")
+        else:
+            print(f"Book '{self.title}' is not available for checkout.")
+    
+    def return_book(self):
+        if not self.available:
+            self.available = True
+            if self.lending_history:
+                self.lending_history[-1]["date_returned"] = datetime.now()
+            print(f"Book '{self.title}' has been returned.")
+        else:
+            print(f"Book '{self.title}' was not checked out.")
+    
+    def display_details(self):
+        status = "Available" if self.available else "Checked out"
+        print(f"Title: {self.title}")
+        print(f"Author: {self.author}")
+        print(f"ISBN: {self.isbn}")
+        print(f"Status: {status}")
+        print("Lending History:")
+        for record in self.lending_history:
+            borrowed = f"Borrowed by {record['borrower']} on {record['date_checked_out']}"
+            returned = f"Returned on {record['date_returned']}" if record['date_returned'] else "Not returned yet"
+            print(f"  - {borrowed}, {returned}")
+
+#library class
+class Library:
+    def __init__(self):
+        self.books = {}
+    
+    def add_book(self, book):
+        self.books[book.isbn] = book
+        print(f"Book '{book.title}' added to the library.")
+    
+    def search_by_title(self, title):
+        found_books = [book for book in self.books.values() if title.lower() in book.title.lower()]
+        return found_books
+    
+    def search_by_author(self, author):
+        found_books = [book for book in self.books.values() if author.lower() in book.author.lower()]
+        return found_books
+    
+    def check_out_book(self, isbn, borrower_name):
+        if isbn in self.books:
+            book = self.books[isbn]
+            book.check_out(borrower_name)
+        else:
+            print(f"Book with ISBN {isbn} not found.")
+    
+    def return_book(self, isbn):
+        if isbn in self.books:
+            book = self.books[isbn]
+            book.return_book()
+        else:
+            print(f"Book with ISBN {isbn} not found.")
+    
+    def display_book_details(self, isbn):
+        if isbn in self.books:
+            self.books[isbn].display_details()
+        else:
+            print(f"Book with ISBN {isbn} not found.")
+
+# Example usage
+if __name__ == "__main__":
+    # Create Library and Books
+    library = Library()
+    
+    book1 = Book("The Great Gatsby", "F. Scott Fitzgerald", "9780743273565")
+    book2 = Book("To Kill a Mockingbird", "Harper Lee", "9780061120084")
+    book3 = Book("1984", "George Orwell", "9780451524935")
+    
+    # Add books to the library
+    library.add_book(book1)
+    library.add_book(book2)
+    library.add_book(book3)
+    
+    # Search for books
+    print("\nSearching for books by title '1984':")
+    found_books = library.search_by_title("1984")
+    for book in found_books:
+        book.display_details()
+    
+    # Check out and return books
+    print("\nChecking out 'The Great Gatsby':")
+    library.check_out_book("9780743273565", "John Doe")
+    
+    print("\nReturning 'The Great Gatsby':")
+    library.return_book("9780743273565")
+    
+    # Display book details
+    print("\nDetails of 'The Great Gatsby':")
+    library.display_book_details("9780743273565")
