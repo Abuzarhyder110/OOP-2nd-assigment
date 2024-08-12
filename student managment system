@@ -1,0 +1,46 @@
+class Student:
+    def __init__(self, name, roll_number, marks):
+        self.name = name
+        self.roll_number = roll_number
+        self.marks = marks  # Assuming marks is a list of scores
+    
+    def calculate_average(self):
+        if not self.marks:
+            return 0
+        return sum(self.marks) / len(self.marks)
+    
+    def display_details(self):
+        print(f"Name: {self.name}")
+        print(f"Roll Number: {self.roll_number}")
+        print(f"Marks: {self.marks}")
+        print(f"Average Marks: {self.calculate_average():.2f}")
+    
+    def has_passed(self, passing_percentage=40):
+        average = self.calculate_average()
+        return average >= passing_percentage
+
+def calculate_class_average(students):
+    if not students:
+        return 0
+    total_sum = sum(student.calculate_average() for student in students)
+    return total_sum / len(students)
+
+# Example usage
+if __name__ == "__main__":
+    # Create Student objects
+    student1 = Student("Alice", "S001", [85, 90, 78])
+    student2 = Student("Bob", "S002", [70, 60, 65])
+    student3 = Student("Charlie", "S003", [50, 55, 65])
+    
+    # Array of Student objects
+    class_students = [student1, student2, student3]
+    
+    # Display details and pass/fail status
+    for student in class_students:
+        student.display_details()
+        print("Passed" if student.has_passed() else "Failed")
+        print()
+    
+    # Calculate and display class average
+    class_avg = calculate_class_average(class_students)
+    print(f"Class Average: {class_avg:.2f}")
